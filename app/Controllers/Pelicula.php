@@ -162,19 +162,19 @@ class Pelicula extends ResourceController
     // PUT/PATCH
     public function update($id = null)
     {
-        $actor = new ActorModel();
+        $pelicula = new PeliculaModel();
     
         $data = $this->request->getRawInput();
      
-        if ($this->validate('actor')) {
-            if (!$actor->get($id)) {
-                return $this->genericResponse(null, array("id" => "El actor no existe"), 500);
+        if ($this->validate('pelicula')) {
+            if (!$pelicula->get($id)) {
+                return $this->genericResponse(null, array("id" => "La pelicula no existe"), 500);
             }
      
-            $actor->update($id, [
-                    'nombre' => $data['nombre'],
-                    'anyoNacimiento' => $data['anyoNacimiento'],
-                    'pais' => $data['pais']
+            $pelicula->update($id, [
+                    'titulo' => $data['titulo'],
+                    'anyo' => $data['anyo'],
+                    'duracion' => $data['duracion']
                 ]);
      
             return $this->genericResponse($this->model->get($id), null, 200);
