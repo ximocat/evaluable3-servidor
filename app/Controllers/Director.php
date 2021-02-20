@@ -2,13 +2,11 @@
 namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
-use App\Models\PeliculaModel;
-use App\Models\ActorModel;
 use App\Models\DirectorModel;
 
-class RestVideoclub extends ResourceController
+class Director extends ResourceController
 {
-    protected $modelName = 'App\Models\VideoclubModel';
+    protected $modelName = 'App\Models\DirectorModel';
     protected $format = 'json';
 
     //Método que nos devuelve un array con los dotos y el estado de la peticion
@@ -39,24 +37,24 @@ class RestVideoclub extends ResourceController
     }
 
     private function map($data){
-        $peliculas = array();
+        $directores = array();
         foreach($data as $row){
-            $pelicula = array(
+            $director = array(
                 "id" => $row['id'],
                 "titulo" => $row['titulo'],
                 "anyo" => $row['anyo'],
                 "duracion" => $row['duracion'],
                 "links" => array(
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"DELETE", "types"=> [] )
+                    array("rel" => "self","href" => $this->url("/director/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
+                    array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"DELETE", "types"=> [] )
                 )
                
             );
-            array_push($jugadores, $jugador);
+            array_push($directores, $director);
         }
-        return $jugadores;
+        return $directores;
     }
 
 
