@@ -18,6 +18,7 @@ class DirectorModel extends Model
     }
 
     public function getAll(){
-        $sql = "SELECT * FROM directores";
+        $query = $this->query("SELECT * FROM directores");
+        return $query->getResult('array');
     }
 }
