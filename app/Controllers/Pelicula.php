@@ -40,7 +40,7 @@ class Pelicula extends ResourceController
         return $protocol . "://" . $_SERVER['HTTP_HOST'] . $segmento;
     }
 
-    private function map($data, $actores)//,$directores,$actores)
+    private function map($data)
     {
         $peliculas = array();
         foreach ($data as $row) {
@@ -49,8 +49,8 @@ class Pelicula extends ResourceController
                 "titulo" => $row['titulo'],
                 "anyo" => $row['anyo'],
                 "duracion" => $row['duracion'],
-                "actores" => $actores,
-                //"directores" => $directores,
+                "actores" => $this->getActores($row['id']),
+                "directores" => $this->getDirectores($row['id']),
                 "links" => array(
                     array("rel" => "self","href" => $this->url("/pelicula/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
                     array("rel" => "self","href" => $this->url("/pelicula/".$row['id']), "action"=>"POST", "types" => ["application/x-www-form-urlencoded"]),
@@ -75,7 +75,7 @@ class Pelicula extends ResourceController
     public function show($id = null)
     {
         $data = $this->model->get($id);
-        $pelicula = $this->map($data, $this->getActores($id)[0]);
+        $pelicula = $this->map($data);
 
         return $this->genericResponse($pelicula, null, 200);
     }
@@ -85,13 +85,13 @@ class Pelicula extends ResourceController
         $modelPeliculaActor=new PeliculaActorModel;
         $modelActor=new ActorModel;
 
-        $actores=[];
+        $actores= array();
         $dataActores=$modelPeliculaActor->get($id_pelicula);
        
         foreach ($dataActores as $row) {
             $dataActor=$modelActor->get($row['id_actor']);
             $dataActor[0]["links"]=$this->makeLinksActor($row['id_actor']);
-            array_push($actores, $dataActor);
+            $actores[]= $dataActor;
         }
         return $actores;
     }
@@ -103,6 +103,33 @@ class Pelicula extends ResourceController
                     array("rel" => "self","href" => $this->url("/actor/".$id_actor), "action"=>"POST", "types" => ["application/x-www-form-urlencoded"]),
                     array("rel" => "self","href" => $this->url("/actor/".$id_actor), "action"=>"PUT" ,"types" => ["application/x-www-form-urlencoded"]),
                     array("rel" => "self","href" => $this->url("/actor/".$id_actor), "action"=>"DELETE", "types"=> [] )
+        );
+        return $links;
+    }
+
+    private function getDirectores($id_pelicula)
+    {
+        $modelPeliculaDirector=new PeliculaDirectorModel;
+        $modelDirector=new DirectorModel;
+
+        $directores=[];
+        $dataDirectores=$modelPeliculaDirector->get($id_pelicula);
+       
+        foreach ($dataDirectores as $row) {
+            $dataDirector=$modelDirector->get($row['id_director']);
+            $dataDirector[0]["links"]=$this->makeLinksDirector($row['id_director']);
+            array_push($directores, $dataDirector);
+        }
+        return $directores;
+    }
+
+    private function makeLinksDirector($id_director)
+    {
+        $links = array(
+                    array("rel" => "self","href" => $this->url("/director/".$id_director),"action" => "GET", "types" =>["text/xml","application/json"]),
+                    array("rel" => "self","href" => $this->url("/director/".$id_director), "action"=>"POST", "types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/director/".$id_director), "action"=>"PUT" ,"types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/director/".$id_director), "action"=>"DELETE", "types"=> [] )
         );
         return $links;
     }
