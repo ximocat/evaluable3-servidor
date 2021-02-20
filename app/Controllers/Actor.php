@@ -46,8 +46,8 @@ class Actor extends ResourceController
                 "pais" => $row['pais'],
                 "links" => array(
                     array("rel" => "self","href" => $this->url("/actor/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
-                    array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"POST", "types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"PUT" ,"types" => ["application/x-www-form-urlencoded"]),
                     array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"DELETE", "types"=> [] )
                 )
                

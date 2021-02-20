@@ -46,8 +46,8 @@ class Director extends ResourceController
                 "pais" => $row['pais'],
                 "links" => array(
                     array("rel" => "self","href" => $this->url("/director/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
-                    array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"POST", "types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"PUT" ,"types" => ["application/x-www-form-urlencoded"]),
                     array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"DELETE", "types"=> [] )
                 )
                
