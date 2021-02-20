@@ -99,5 +99,29 @@ class Director extends ResourceController
         return $this->genericResponse(null, $validation->getErrors(), 500);
     }
 
+    // PUT/PATCH
+    public function update($id = null)
+    {
+        $director = new DirectorModel();
+
+        $data = $this->request->getRawInput();
+ 
+        if ($this->validate('director')) {
+ 
+            if (!$director->get($id)) {
+                return $this->genericResponse(null, array("id" => "El director no existe"), 500);
+            }
+ 
+            $director->update($id, [
+                'nombre' => $data['nombre'],
+                'anyoNacimiento' => $data['anyoNacimiento'],             
+                'pais' => $data['pais']
+            ]);
+ 
+            return $this->genericResponse($this->model->get($id), null, 200);
+        }
+
+    }
+
 
 }
