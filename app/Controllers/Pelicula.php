@@ -3,8 +3,8 @@ namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\PeliculaModel;
-use App\Models\PeliculaActor;
-use App\Models\PeliculaDirector;
+use App\Models\ActorModel;
+use App\Models\DirectorModel;
 use App\Models\PeliculaActorModel;
 use App\Models\PeliculaDirectorModel;
 
