@@ -73,4 +73,27 @@ class Actor extends ResourceController
         return $this->genericResponse($actor, null, 200);
     }
 
+    // POST
+    public function create()
+    {
+         $actor = new DirectorModel();
+ 
+        if ($this->validate('actor')) {
+ 
+            $id = $actor->insert([
+                'nombre' => $this->request->getPost('nombre'),
+                'anyoNacimiento' => $this->request->getPost('anyoNacimiento'),               
+                'pais' => $this->request->getPost('pais')
+            ]);
+ 
+
+            return $this->genericResponse($this->model->get($id), null, 200);
+        }
+ 
+        //Hemos creado validaciones en el archivo de configuración Validation.php
+        $validation = \Config\Services::validation();
+        //Si no pasa la validación devolvemos un error 500
+        return $this->genericResponse(null, $validation->getErrors(), 500);
+    }
+
 }
