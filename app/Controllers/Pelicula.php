@@ -140,21 +140,91 @@ class Pelicula extends ResourceController
     public function create()
     {
         $pelicula = new PeliculaModel();
-     
-        if ($this->validate('pelicula')) {
+        $director =new DirectorModel();
+        $actor = new ActorModel();
+        $peliculaActor=new PeliculaActorModel();
+        $peliculaDirector=new PeliculaDirectorModel();
+        $actores=[];
+        $directores=[];
+        
+        
+        //Comprobamos si no se ha pasado el director
+        if (!$this->request->getPost("id_director")) {
+            return $this->genericResponse(null, array("id_director" =>
+                "No se ha pasado el id del director por parámetro"), 500);
+        }
+
+        if (!$director->get($this->request->getPost("id_director"))) {
+            return $this->genericResponse(null, array("id_director" =>
+                "El director no existe"), 500);
+        }
+        //Guardamos los id de los directores en un array. De momento solo habrá
+        //un director aunque se deja así como posible mejora a posteriore en la
+        //que pueda haber más de un director
+        array_push($directores, $director->get($this->request->getPost("id_director")));
+
+        //Comprobamos si no se ha pasado el numero de actores
+        if (!$this->request->getPost("numActores")) {
+            return $this->genericResponse(null, array("numActores" =>
+                "No se ha pasado el número de actores por parámetro"), 500);
+        }
+
+        //Entero que contendrá el número de actores
+        $numActores=(int)$this->request->getPost("numActores");
+
+        //Bucle para comprobar si no se han pasado los id de los actores o que no existan
+        for ($i=0;$i<$numActores;$i++) {
+            //Comprobamos si no se ha pasado el actores
+            if (!$this->request->getPost("id_actor[".$i."]")) {
+                return $this->genericResponse(null, array("id_actor[".$i."]" =>
+                    "No se ha pasado el id del actor por parámetro"), 500);
+            }
+            //Comprobamos si algún actor no existe
+            if (!$actor->get($this->request->getPost("id_actor[".$i."]"))) {
+                return $this->genericResponse(null, array("id_actor[".$i."]" =>
+                    "El actor no existe"), 500);
+            }
+            //Guardamos los id de los actores en un array
+            array_push($actores, $actor->get($this->request->getPost("id_actor[".$i."]")));
+        }
+
+        //Legados a este punto sabemos que se han pasado bien todos los datos
+        //de actores y director. Vamos a crear la pelicula y a modificar las
+        //tablas PeliculasDirector y PeliculasActor para que reflejen los cambios
+        if ($this->validate('pelicula')) {//Comprobamos que pase la validacion
             $id = $pelicula->insert([
                     'titulo' => $this->request->getPost('titulo'),
                     'anyo' => $this->request->getPost('anyo'),
                     'duracion' => $this->request->getPost('duracion')
                 ]);
-     
-    
+                //Introducimos los directores en PeliculasDirector. Solo habrá
+                //un director pero se deja preparado para proximas versiones que
+                //soporten más de un director
+                for($i=0;$i<count($directores);$i++){
+                    echo "id_pelicula: ".$id;
+                    echo "\ni : ".$i;
+                    var_dump($directores);
+                    /* $peliculaDirector->insert([
+                        'id_pelicula' =>$id,
+                        'id_director' =>$directores[$i]
+                    ]); */
+                }
+                //Introducimos los actores en PeliculasActor
+                //for($i=0;$i<count($actores);$i++){
+                //    $peliculaActor->insert([
+                //        'id_pelicula' =>$id,
+                //        'id_actor' =>$actores[$i]
+                //    ]);
+                //}
+                    echo "********************************************";
             return $this->genericResponse($this->model->get($id), null, 200);
         }
+
+        
      
-        //Hemos creado validaciones en el archivo de configuración Validation.php
+        //Validacion de pelicula
         $validation = \Config\Services::validation();
-        //Si no pasa la validación devolvemos un error 500
+        //Devolvemos error si no es validado
         return $this->genericResponse(null, $validation->getErrors(), 500);
     }
     
@@ -177,7 +247,7 @@ class Pelicula extends ResourceController
                     'duracion' => $data['duracion']
                 ]);
      
-            return $this->genericResponse($this->model->get($id), null, 200);
+            return $this->genericResponse($this->model->get($id), null, 210);
         }
     }
 
