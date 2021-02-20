@@ -76,7 +76,7 @@ class Actor extends ResourceController
     // POST
     public function create()
     {
-         $actor = new DirectorModel();
+         $actor = new ActorModel();
  
         if ($this->validate('actor')) {
  
