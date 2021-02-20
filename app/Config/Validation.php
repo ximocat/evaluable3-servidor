@@ -40,4 +40,16 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+	public $director =[
+        'nombre' => 'required|min_length[3]|max_length[50]',
+		'anyoNacimiento' => 'required|min_length[3]|max_length[11]',
+		'pais' => 'required|min_length[3]|max_length[50]'
+    ];
+
+	public $actor =[
+        'nombre' => 'required|min_length[3]|max_length[50]',
+		'anyoNacimiento' => 'required|min_length[3]|max_length[11]',
+		'pais' => 'required|min_length[3]|max_length[50]'
+    ];
 }
+	
