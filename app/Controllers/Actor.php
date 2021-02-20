@@ -8,7 +8,7 @@ use App\Models\DirectorModel;
 
 class Actor extends ResourceController
 {
-    protected $modelName = 'App\Models\VideoclubModel';
+    protected $modelName = 'App\Models\ActorModel';
     protected $format = 'json';
 
     //Método que nos devuelve un array con los dotos y el estado de la peticion
