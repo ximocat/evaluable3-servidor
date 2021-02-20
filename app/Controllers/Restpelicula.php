@@ -3,12 +3,18 @@ namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\PeliculaModel;
-use App\Models\ActorModel;
-use App\Models\DirectorModel;
+use App\Models\PeliculaActor;
+use App\Models\PeliculaDirector;
+use App\Models\PeliculaActorModel;
+use App\Models\PeliculaDirectorModel;
 
-class RestVideoclub extends ResourceController
+class Restpelicula extends ResourceController
 {
-    protected $modelName = 'App\Models\VideoclubModel';
+    protected $modelPelicula = 'App\Models\Pelicula';
+    protected $modelDirector = 'App\Models\Director';
+    protected $modelActor = 'App\Models\Actor';
+    protected $modelPeliculaActor = 'App\Models\PeliculaActor';
+    protected $modelPeliculaDirector = 'App\Models\PeliculaDirector';
     protected $format = 'json';
 
     //Método que nos devuelve un array con los dotos y el estado de la peticion
@@ -47,16 +53,16 @@ class RestVideoclub extends ResourceController
                 "anyo" => $row['anyo'],
                 "duracion" => $row['duracion'],
                 "links" => array(
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"DELETE", "types"=> [] )
+                    array("rel" => "self","href" => $this->url("/pelicula/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
+                    array("rel" => "self","href" => $this->url("/pelicula/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/pelicula/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/pelicula/".$row['id']), "action"=>"DELETE", "types"=> [] )
                 )
                
             );
-            array_push($jugadores, $jugador);
+            array_push($peliculas, $pelicula);
         }
-        return $jugadores;
+        return $peliculas;
     }
 
 
