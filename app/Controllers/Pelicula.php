@@ -8,7 +8,7 @@ use App\Models\PeliculaDirector;
 use App\Models\PeliculaActorModel;
 use App\Models\PeliculaDirectorModel;
 
-class Restpelicula extends ResourceController
+class Pelicula extends ResourceController
 {
     protected $modelPelicula = 'App\Models\Pelicula';
     protected $modelDirector = 'App\Models\Director';
