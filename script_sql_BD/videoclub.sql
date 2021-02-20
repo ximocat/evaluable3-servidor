@@ -176,20 +176,20 @@ INSERT INTO `usuarios` (`id`, `email`, `password`, `guardaCredenciales`) VALUES
 -- Indices de la tabla `actores`
 --
 ALTER TABLE `actores`
-  ADD PRIMARY KEY (`id`);
-
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK_A` (`nombre`);
 --
 -- Indices de la tabla `directores`
 --
 ALTER TABLE `directores`
-  ADD PRIMARY KEY (`id`);
-
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK_D` (`nombre`);
 --
 -- Indices de la tabla `peliculas`
 --
 ALTER TABLE `peliculas`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `titulo` (`titulo`);
+  ADD UNIQUE KEY `UK_P` (`titulo`);
 
 --
 -- Indices de la tabla `peliculas_actores`
