@@ -41,9 +41,9 @@ class Director extends ResourceController
         foreach($data as $row){
             $director = array(
                 "id" => $row['id'],
-                "titulo" => $row['titulo'],
-                "anyo" => $row['anyo'],
-                "duracion" => $row['duracion'],
+                "nombre" => $row['nombre'],
+                "anyoNacimiento" => $row['anyoNacimiento'],
+                "pais" => $row['pais'],
                 "links" => array(
                     array("rel" => "self","href" => $this->url("/director/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
                     array("rel" => "self","href" => $this->url("/director/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
@@ -55,6 +55,22 @@ class Director extends ResourceController
             array_push($directores, $director);
         }
         return $directores;
+    }
+
+    public function index(){
+        $data=$this->model->getAll();
+        $directores = $this->map($data);
+
+        return $this->genericResponse($directores,null,200);
+    }
+
+    public function show($id = null)
+    {
+        
+        $data = $this->model->get($id);      
+        $director = $this->map($data); 
+
+        return $this->genericResponse($director, null, 200);
     }
 
 
