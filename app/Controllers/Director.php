@@ -9,7 +9,7 @@ class Director extends ResourceController
     protected $modelName = 'App\Models\DirectorModel';
     protected $format = 'json';
 
-    //Método que nos devuelve un array con los dotos y el estado de la peticion
+    //Método que nos devuelve un array con los datos y el estado de la peticion
     private function genericResponse($data, $msj, $code)
     {
         if ($code == 200) {
@@ -57,6 +57,8 @@ class Director extends ResourceController
         return $directores;
     }
 
+    //GET
+
     public function index(){
         $data=$this->model->getAll();
         $directores = $this->map($data);
@@ -71,6 +73,30 @@ class Director extends ResourceController
         $director = $this->map($data); 
 
         return $this->genericResponse($director, null, 200);
+    }
+
+    // POST
+    public function create()
+    {
+ 
+        $director = new DirectorModel();
+ 
+        if ($this->validate('director')) {
+ 
+            $id = $director->insert([
+                'nombre' => $this->request->getPost('nombre'),
+                'anyoNacimiento' => $this->request->getPost('anyoNacimiento'),               
+                'pais' => $this->request->getPost('pais')
+            ]);
+ 
+
+            return $this->genericResponse($this->model->get($id), null, 200);
+        }
+ 
+        //Hemos creado validaciones en el archivo de configuración Validation.php
+        $validation = \Config\Services::validation();
+        //Si no pasa la validación devolvemos un error 500
+        return $this->genericResponse(null, $validation->getErrors(), 500);
     }
 
 
