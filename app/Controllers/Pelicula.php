@@ -185,13 +185,13 @@ class Pelicula extends ResourceController
     //DELETE
     public function delete($id = null)
     {
-        $director = new DirectorModel();
+        $pelicula = new PeliculaModel();
         //Comprobamos antes de borrar si existe
         if (!$this->model->get($id)) {
-            return $this->genericResponse(null, array("id" => "El director no existe"), 500);
+            return $this->genericResponse(null, array("id" => "La pelicula no existe"), 500);
         } else {
-            $director->delete($id);
-            return $this->genericResponse("Director eliminado", null, 200);
+            $pelicula->delete($id);
+            return $this->genericResponse("Pelicula eliminada", null, 200);
         }
     }
 }
