@@ -10,11 +10,7 @@ use App\Models\PeliculaDirectorModel;
 
 class Pelicula extends ResourceController
 {
-    protected $modelPelicula = 'App\Models\Pelicula';
-    protected $modelDirector = 'App\Models\Director';
-    protected $modelActor = 'App\Models\Actor';
-    protected $modelPeliculaActor = 'App\Models\PeliculaActor';
-    protected $modelPeliculaDirector = 'App\Models\PeliculaDirector';
+    protected $modelName = 'App\Models\PeliculaModel';
     protected $format = 'json';
 
     //Método que nos devuelve un array con los dotos y el estado de la peticion
@@ -34,24 +30,27 @@ class Pelicula extends ResourceController
     }
 
     //Método que nos devuelve la URL
-    private function url($segmento){
-        if(isset($_SERVER['HTTPS'])){
+    private function url($segmento)
+    {
+        if (isset($_SERVER['HTTPS'])) {
             $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
-        }
-        else{
+        } else {
             $protocol = 'http';
         }
         return $protocol . "://" . $_SERVER['HTTP_HOST'] . $segmento;
     }
 
-    private function map($data){
+    private function map($data, $actores)//,$directores,$actores)
+    {
         $peliculas = array();
-        foreach($data as $row){
+        foreach ($data as $row) {
             $pelicula = array(
                 "id" => $row['id'],
                 "titulo" => $row['titulo'],
                 "anyo" => $row['anyo'],
                 "duracion" => $row['duracion'],
+                "actores" => $actores,
+                //"directores" => $directores,
                 "links" => array(
                     array("rel" => "self","href" => $this->url("/pelicula/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
                     array("rel" => "self","href" => $this->url("/pelicula/".$row['id']), "action"=>"POST", "types" => ["application/x-www-form-urlencoded"]),
@@ -62,24 +61,110 @@ class Pelicula extends ResourceController
             );
             array_push($peliculas, $pelicula);
         }
+        
         return $peliculas;
     }
 
-    public function index(){
+    public function index()
+    {
         $data=$this->model->getAll();
         $peliculas = $this->map($data);
-
-        return $this->genericResponse($peliculas,null,200);
+        return $this->genericResponse($peliculas, null, 200);
     }
 
     public function show($id = null)
     {
-        
-        $data = $this->model->get($id);      
-        $pelicula = $this->map($data); 
+        $data = $this->model->get($id);
+        $pelicula = $this->map($data, $this->getActores($id)[0]);
 
         return $this->genericResponse($pelicula, null, 200);
     }
 
+    private function getActores($id_pelicula)
+    {
+        $modelPeliculaActor=new PeliculaActorModel;
+        $modelActor=new ActorModel;
 
+        $actores=[];
+        $dataActores=$modelPeliculaActor->get($id_pelicula);
+       
+        foreach ($dataActores as $row) {
+            $dataActor=$modelActor->get($row['id_actor']);
+            $dataActor[0]["links"]=$this->makeLinksActor($row['id_actor']);
+            array_push($actores, $dataActor);
+        }
+        return $actores;
+    }
+
+    private function makeLinksActor($id_actor)
+    {
+        $links = array(
+                    array("rel" => "self","href" => $this->url("/actor/".$id_actor),"action" => "GET", "types" =>["text/xml","application/json"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$id_actor), "action"=>"POST", "types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$id_actor), "action"=>"PUT" ,"types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$id_actor), "action"=>"DELETE", "types"=> [] )
+        );
+        return $links;
+    }
+
+
+
+    // POST
+    public function create()
+    {
+        $pelicula = new PeliculaModel();
+     
+        if ($this->validate('pelicula')) {
+            $id = $pelicula->insert([
+                    'titulo' => $this->request->getPost('titulo'),
+                    'anyo' => $this->request->getPost('anyo'),
+                    'duracion' => $this->request->getPost('duracion')
+                ]);
+     
+    
+            return $this->genericResponse($this->model->get($id), null, 200);
+        }
+     
+        //Hemos creado validaciones en el archivo de configuración Validation.php
+        $validation = \Config\Services::validation();
+        //Si no pasa la validación devolvemos un error 500
+        return $this->genericResponse(null, $validation->getErrors(), 500);
+    }
+    
+    
+    // PUT/PATCH
+    public function update($id = null)
+    {
+        $actor = new ActorModel();
+    
+        $data = $this->request->getRawInput();
+     
+        if ($this->validate('actor')) {
+            if (!$actor->get($id)) {
+                return $this->genericResponse(null, array("id" => "El actor no existe"), 500);
+            }
+     
+            $actor->update($id, [
+                    'nombre' => $data['nombre'],
+                    'anyoNacimiento' => $data['anyoNacimiento'],
+                    'pais' => $data['pais']
+                ]);
+     
+            return $this->genericResponse($this->model->get($id), null, 200);
+        }
+    }
+
+
+    //DELETE
+    public function delete($id = null)
+    {
+        $director = new DirectorModel();
+        //Comprobamos antes de borrar si existe
+        if (!$this->model->get($id)) {
+            return $this->genericResponse(null, array("id" => "El director no existe"), 500);
+        } else {
+            $director->delete($id);
+            return $this->genericResponse("Director eliminado", null, 200);
+        }
+    }
 }
