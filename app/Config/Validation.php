@@ -42,14 +42,20 @@ class Validation
 	//--------------------------------------------------------------------
 	public $director =[
         'nombre' => 'required|min_length[3]|max_length[50]',
-		'anyoNacimiento' => 'required|min_length[3]|max_length[11]',
+		'anyoNacimiento' => 'required|min_length[4]|max_length[4]',
 		'pais' => 'required|min_length[3]|max_length[50]'
     ];
 
 	public $actor =[
         'nombre' => 'required|min_length[3]|max_length[50]',
-		'anyoNacimiento' => 'required|min_length[3]|max_length[11]',
+		'anyoNacimiento' => 'required|min_length[4]|max_length[4]',
 		'pais' => 'required|min_length[3]|max_length[50]'
+    ];
+
+	public $pelicula =[
+        'titulo' => 'required|min_length[3]|max_length[50]',
+		'anyo' => 'required|min_length[4]|max_length[4]',
+		'duracion' => 'required|min_length[1]|max_length[6]'
     ];
 }
 	
