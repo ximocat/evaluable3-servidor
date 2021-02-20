@@ -21,6 +21,7 @@ class PeliculaModel extends Model
     }
 
     public function getAll(){
-        $sql = "SELECT * FROM peliculas";
+        $query = $this->query("SELECT * FROM peliculas");
+        return $query->getResult('array');
     }
 }
