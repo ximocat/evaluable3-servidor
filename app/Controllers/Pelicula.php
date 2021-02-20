@@ -65,5 +65,21 @@ class Restpelicula extends ResourceController
         return $peliculas;
     }
 
+    public function index(){
+        $data=$this->model->getAll();
+        $peliculas = $this->map($data);
+
+        return $this->genericResponse($peliculas,null,200);
+    }
+
+    public function show($id = null)
+    {
+        
+        $data = $this->model->get($id);      
+        $pelicula = $this->map($data); 
+
+        return $this->genericResponse($pelicula, null, 200);
+    }
+
 
 }
