@@ -18,6 +18,7 @@ class ActorModel extends Model
     }
 
     public function getAll(){
-        $sql = "SELECT * FROM actores";
+        $query = $this->query("SELECT * FROM actores");
+        return $query->getResult('array');
     }
 }
