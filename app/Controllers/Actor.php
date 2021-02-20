@@ -2,9 +2,7 @@
 namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
-use App\Models\PeliculaModel;
 use App\Models\ActorModel;
-use App\Models\DirectorModel;
 
 class Actor extends ResourceController
 {
