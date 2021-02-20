@@ -41,9 +41,9 @@ class Actor extends ResourceController
         foreach($data as $row){
             $actor = array(
                 "id" => $row['id'],
-                "titulo" => $row['titulo'],
-                "anyo" => $row['anyo'],
-                "duracion" => $row['duracion'],
+                "nombre" => $row['nombre'],
+                "anyoNacimiento" => $row['anyoNacimiento'],
+                "pais" => $row['pais'],
                 "links" => array(
                     array("rel" => "self","href" => $this->url("/actor/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
                     array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
@@ -57,5 +57,20 @@ class Actor extends ResourceController
         return $actores;
     }
 
+    public function index(){
+        $data=$this->model->getAll();
+        $actores = $this->map($data);
+
+        return $this->genericResponse($actores,null,200);
+    }
+
+    public function show($id = null)
+    {
+        
+        $data = $this->model->get($id);      
+        $actor = $this->map($data); 
+
+        return $this->genericResponse($actor, null, 200);
+    }
 
 }
