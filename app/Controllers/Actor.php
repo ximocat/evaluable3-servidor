@@ -6,7 +6,7 @@ use App\Models\PeliculaModel;
 use App\Models\ActorModel;
 use App\Models\DirectorModel;
 
-class RestVideoclub extends ResourceController
+class Actor extends ResourceController
 {
     protected $modelName = 'App\Models\VideoclubModel';
     protected $format = 'json';
@@ -39,24 +39,24 @@ class RestVideoclub extends ResourceController
     }
 
     private function map($data){
-        $peliculas = array();
+        $actores = array();
         foreach($data as $row){
-            $pelicula = array(
+            $actor = array(
                 "id" => $row['id'],
                 "titulo" => $row['titulo'],
                 "anyo" => $row['anyo'],
                 "duracion" => $row['duracion'],
                 "links" => array(
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
-                    array("rel" => "self","href" => $this->url("/restnba/".$row['id']), "action"=>"DELETE", "types"=> [] )
+                    array("rel" => "self","href" => $this->url("/actor/".$row['id']),"action" => "GET", "types" =>["text/xml","application/json"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"PUT", "types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"PATCH" ,"types" => ["application/x-www-form-urlencoded"]),
+                    array("rel" => "self","href" => $this->url("/actor/".$row['id']), "action"=>"DELETE", "types"=> [] )
                 )
                
             );
-            array_push($jugadores, $jugador);
+            array_push($actores, $actor);
         }
-        return $jugadores;
+        return $actores;
     }
 
 
