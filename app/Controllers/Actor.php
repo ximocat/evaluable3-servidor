@@ -96,4 +96,29 @@ class Actor extends ResourceController
         return $this->genericResponse(null, $validation->getErrors(), 500);
     }
 
+
+    // PUT/PATCH
+    public function update($id = null)
+    {
+        $actor = new ActorModel();
+
+        $data = $this->request->getRawInput();
+ 
+        if ($this->validate('actor')) {
+ 
+            if (!$actor->get($id)) {
+                return $this->genericResponse(null, array("id" => "El actor no existe"), 500);
+            }
+ 
+            $actor->update($id, [
+                'nombre' => $data['nombre'],
+                'anyoNacimiento' => $data['anyoNacimiento'],             
+                'pais' => $data['pais']
+            ]);
+ 
+            return $this->genericResponse($this->model->get($id), null, 200);
+        }
+
+    }
+
 }
