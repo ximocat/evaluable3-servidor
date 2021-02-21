@@ -40,6 +40,7 @@ class Pelicula extends ResourceController
         return $protocol . "://" . $_SERVER['HTTP_HOST'] . $segmento;
     }
 
+    //Funcion a la que le pasamos los datos y los prepara para ser enviados
     private function map($data)
     {
         $peliculas = array();
@@ -65,6 +66,7 @@ class Pelicula extends ResourceController
         return $peliculas;
     }
 
+    //Metodo utilizado para las operaciones GET de todos los datos
     public function index()
     {
         $data=$this->model->getAll();
@@ -72,6 +74,8 @@ class Pelicula extends ResourceController
         return $this->genericResponse($peliculas, null, 200);
     }
 
+    //Metodo utilizado para las operaciones GET de un solo dato cuya id pasamos
+    //por parametro
     public function show($id = null)
     {
         $data = $this->model->get($id);
@@ -80,6 +84,8 @@ class Pelicula extends ResourceController
         return $this->genericResponse($pelicula, null, 200);
     }
 
+    //Metodo a la que le pasamos el id de una peli y nos devuelve un array con
+    //sus actores
     private function getActores($id_pelicula)
     {
         $modelPeliculaActor=new PeliculaActorModel;
@@ -96,6 +102,7 @@ class Pelicula extends ResourceController
         return $actores;
     }
 
+    //Metodo encargado de generar los links del actur cuyo id se pasa por parametro
     private function makeLinksActor($id_actor)
     {
         $links = array(
@@ -107,6 +114,8 @@ class Pelicula extends ResourceController
         return $links;
     }
 
+    //Metodo a la que le pasamos el id de una peli y nos devuelve un array con
+    //sus directores
     private function getDirectores($id_pelicula)
     {
         $modelPeliculaDirector=new PeliculaDirectorModel;
@@ -123,6 +132,7 @@ class Pelicula extends ResourceController
         return $directores;
     }
 
+    //Metodo encargado de generar los links del director cuyo id se pasa por parametro
     private function makeLinksDirector($id_director)
     {
         $links = array(
@@ -136,7 +146,7 @@ class Pelicula extends ResourceController
 
 
 
-    // POST
+    //Metodo utilizado para las operaciones POST
     public function create()
     {
         $pelicula = new PeliculaModel();
@@ -226,7 +236,7 @@ class Pelicula extends ResourceController
     }
     
     
-    // PUT/PATCH
+    //Metodo utilizado para las operaciones PUT/PATCH
     public function update($id = null)
     {
         $pelicula = new PeliculaModel();
@@ -249,7 +259,7 @@ class Pelicula extends ResourceController
     }
 
 
-    //DELETE
+    //Metodo utilizado para las operaciones DELETE
     public function delete($id = null)
     {
         $pelicula = new PeliculaModel();
