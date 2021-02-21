@@ -17,6 +17,7 @@ class ActorModel extends Model
         return $query->getResult('array');
     }
 
+    //Metodo que devuelve todos los actores
     public function getAll(){
         $query = $this->query("SELECT * FROM actores");
         return $query->getResult('array');

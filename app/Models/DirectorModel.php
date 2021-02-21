@@ -8,7 +8,7 @@ class DirectorModel extends Model
     protected $primaryKey = 'id';
     protected $allowedFields = ['nombre', 'anyoNacimiento', 'pais'];
     
-    //Metodo que devuelve un único actor cuyo id se pasa por parámetro
+    //Metodo que devuelve un único director cuyo id se pasa por parámetro
     public function get($id){     
         $sql = "SELECT * FROM directores WHERE directores.id=:id:";
         $query = $this->query($sql, [
@@ -17,6 +17,7 @@ class DirectorModel extends Model
         return $query->getResult('array');
     }
 
+    //Metodo que devuelve todos los directores
     public function getAll(){
         $query = $this->query("SELECT * FROM directores");
         return $query->getResult('array');
