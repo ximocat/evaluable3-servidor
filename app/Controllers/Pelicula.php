@@ -252,7 +252,7 @@ class Pelicula extends ResourceController
                     'duracion' => $data['duracion']
                 ]);
      
-            return $this->genericResponse($this->model->get($id), null, 210);
+            return $this->genericResponse($this->model->get($id), null, 200);
         }
     }
 
