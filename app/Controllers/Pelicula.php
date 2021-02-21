@@ -153,7 +153,7 @@ class Pelicula extends ResourceController
             return $this->genericResponse(null, array("id_director" =>
                 "No se ha pasado el id del director por parámetro"), 500);
         }
-
+        //Comprobamos si no existe el director
         if (!$director->get($this->request->getPost("id_director"))) {
             return $this->genericResponse(null, array("id_director" =>
                 "El director no existe"), 500);
@@ -161,7 +161,7 @@ class Pelicula extends ResourceController
         //Guardamos los id de los directores en un array. De momento solo habrá
         //un director aunque se deja así como posible mejora a posteriore en la
         //que pueda haber más de un director
-        array_push($directores, $director->get($this->request->getPost("id_director")));
+        array_push($directores, $director->get($this->request->getPost("id_director"))[0]["id"]);
 
         //Comprobamos si no se ha pasado el numero de actores
         if (!$this->request->getPost("numActores")) {
@@ -185,7 +185,7 @@ class Pelicula extends ResourceController
                     "El actor no existe"), 500);
             }
             //Guardamos los id de los actores en un array
-            array_push($actores, $actor->get($this->request->getPost("id_actor[".$i."]")));
+            array_push($actores, $actor->get($this->request->getPost("id_actor[".$i."]"))[0]["id"]);
         }
 
         //Legados a este punto sabemos que se han pasado bien todos los datos
@@ -197,30 +197,27 @@ class Pelicula extends ResourceController
                     'anyo' => $this->request->getPost('anyo'),
                     'duracion' => $this->request->getPost('duracion')
                 ]);
+                
                 //Introducimos los directores en PeliculasDirector. Solo habrá
                 //un director pero se deja preparado para proximas versiones que
                 //soporten más de un director
                 for($i=0;$i<count($directores);$i++){
-                    echo "id_pelicula: ".$id;
-                    echo "\ni : ".$i;
-                    var_dump($directores);
-                    /* $peliculaDirector->insert([
+                    $peliculaDirector->insert([
                         'id_pelicula' =>$id,
                         'id_director' =>$directores[$i]
-                    ]); */
+                    ]);
                 }
+
                 //Introducimos los actores en PeliculasActor
-                //for($i=0;$i<count($actores);$i++){
-                //    $peliculaActor->insert([
-                //        'id_pelicula' =>$id,
-                //        'id_actor' =>$actores[$i]
-                //    ]);
-                //}
-                    echo "********************************************";
+                for($i=0;$i<count($actores);$i++){
+                    $peliculaActor->insert([
+                        'id_pelicula' =>$id,
+                        'id_actor' =>$actores[$i]
+                    ]);
+                }
+            //Mandamos la respuesta
             return $this->genericResponse($this->model->get($id), null, 200);
         }
-
-        
      
         //Validacion de pelicula
         $validation = \Config\Services::validation();
