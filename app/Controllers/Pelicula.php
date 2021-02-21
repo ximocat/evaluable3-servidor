@@ -13,15 +13,15 @@ class Pelicula extends ResourceController
     protected $modelName = 'App\Models\PeliculaModel';
     protected $format = 'json';
 
-    //Método que nos devuelve un array con los dotos y el estado de la peticion
+    //Método que nos devuelve un array con los datos y el estado de la peticion
     private function genericResponse($data, $msj, $code)
     {
-        if ($code == 200) {
+        if ($code == 200) {//todo correcto
             return $this->respond(array(
                 "data" => $data,
                 "code" => $code
-            )); //, 404, "No hay nada"
-        } else {
+            )); 
+        } else { //Error
             return $this->respond(array(
                 "msj" => $msj,
                 "code" => $code
@@ -144,8 +144,6 @@ class Pelicula extends ResourceController
         return $links;
     }
 
-
-
     //Metodo utilizado para las operaciones POST
     public function create()
     {
@@ -257,7 +255,6 @@ class Pelicula extends ResourceController
             return $this->genericResponse($this->model->get($id), null, 210);
         }
     }
-
 
     //Metodo utilizado para las operaciones DELETE
     public function delete($id = null)
